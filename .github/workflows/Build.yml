@@ -65,14 +65,16 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON "-DCMAKE_OSX_ARCHITECTURES=${{ matrix.config.osx_arch }}"
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 "-DCMAKE_OSX_ARCHITECTURES=${{ matrix.config.osx_arch }}"
         cmake --build .
+        cat compile_commands.json
 
     - name: MSVC build
       if: contains( matrix.config.generators, 'Visual Studio' )
       run: |
         mkdir build
         cd build
-        cmake .. -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_BUILD_TYPE=Release -A "${{ matrix.config.msvc_arch }}"
+        cmake ..  -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -A "${{ matrix.config.msvc_arch }}"
         cmake --build . --config Release
+        type compile_commands.json
       shell: cmd
